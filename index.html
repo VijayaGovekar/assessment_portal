@@ -6,52 +6,22 @@
   <title>Assessment Portal</title>
   <style>
     :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --muted:#5b6475;
-      --text:#111827;
-      --line:rgba(17,24,39,.12);
-      --btn:#2563eb;
-      --ok:#059669;
-      --err:#b91c1c;
+      --bg:#f6f7fb; --card:#fff; --muted:#5b6475; --text:#111827; --line:rgba(17,24,39,.12);
+      --btn:#2563eb; --ok:#059669; --err:#b91c1c;
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);}
     .wrap{max-width:1100px;margin:0 auto;padding:22px 16px 56px;}
     h1{font-size:22px;margin:0 0 12px;}
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px;
-      box-shadow:0 6px 18px rgba(17,24,39,.06);
-    }
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(17,24,39,.06);}
     .grid{display:grid;gap:12px;}
     @media (min-width:960px){ .grid{grid-template-columns: 1.25fr .75fr;} }
     .topbar{display:grid;gap:10px;grid-template-columns:1fr;}
     @media (min-width:820px){ .topbar{grid-template-columns: 1.2fr .8fr;} }
     .label{font-size:12px;color:var(--muted);margin:0 0 6px}
-    select,input{
-      width:100%;
-      padding:9px 10px;
-      border-radius:10px;
-      background:#fff;
-      color:var(--text);
-      border:1px solid var(--line)
-    }
+    select,input{width:100%;padding:9px 10px;border-radius:10px;background:#fff;color:var(--text);border:1px solid var(--line)}
     select:focus,input:focus{outline:none;border-color:rgba(37,99,235,.55)}
-    .scaleBox{
-      margin-top:10px;
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:12px;
-      padding:10px 12px;
-    }
+    .scaleBox{margin-top:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;}
     .scaleTitle{font-size:12px;color:var(--muted);margin:0 0 6px;font-weight:700}
     .scaleList{margin:0;padding-left:18px;font-size:13px;line-height:1.35}
     .scaleList li{margin:2px 0}
@@ -144,7 +114,7 @@
 <script>
 /* -------------------- Scales -------------------- */
 const IBQ_SCALE = [
-"1 — I can't remember ever using this tactic with others",
+  "1 — I can't remember ever using this tactic with others",
   "2 — I very seldom use this tactic with others",
   "3 — I occasionally use this tactic with others",
   "4 — I use this tactic moderately often with others",
@@ -254,9 +224,16 @@ const CONFLICT_STRATEGIES = [
 ];
 
 /* -------------------- State -------------------- */
-let state = { active: "ibq" };
+let state = {
+  active: "ibq",
+  calculated: false
+};
 
 /* -------------------- UI helpers -------------------- */
+function setStatus(html){
+  document.getElementById("statusText").innerHTML = html || "";
+}
+
 function renderScale(list){
   document.getElementById("scaleMeaning").innerHTML = list.map(x=>`<li>${x}</li>`).join("");
 }
@@ -300,21 +277,23 @@ function renderQuestions(){
     </table>
   `;
 
+  // reset state
+  state.calculated = false;
+  setStatus("");
+  renderAnsweredCount();
+  clearResults();
+
+  // only update count; DO NOT show results until Calculate
   document.querySelectorAll("select[data-item]").forEach(s => {
     s.value = "0";
     s.addEventListener("change", () => {
+      // any change after calculating hides results again
+      state.calculated = false;
+      setStatus("");
       renderAnsweredCount();
-      if (isComplete()) {
-        renderResults();
-        document.getElementById("statusText").textContent = "";
-      } else {
-        clearResults();
-      }
+      clearResults();
     });
   });
-
-  renderAnsweredCount();
-  clearResults();
 }
 
 /* -------------------- Data helpers -------------------- */
@@ -372,6 +351,8 @@ function clearResults(){
   document.getElementById("overallRow").style.display = isIBQ ? "flex" : "none";
   document.getElementById("overallVal").textContent = "—";
   document.getElementById("dimensionResults").innerHTML = "";
+  document.getElementById("primaryVal").textContent = "—";
+  document.getElementById("secondaryVal").textContent = "—";
 }
 
 function renderResults(){
@@ -394,8 +375,6 @@ function renderResults(){
       <div class="v">${isIBQ ? d.score.toFixed(2) : Math.round(d.score)}</div>
     </div>
   `).join("");
-
-  return res;
 }
 
 /* -------------------- PDF report -------------------- */
@@ -486,8 +465,7 @@ function buildReportHTML(){
 function openPDF(){
   const w = window.open("", "_blank");
   if (!w){
-    document.getElementById("statusText").innerHTML =
-      `<span class="err">Popup blocked. Allow popups to download PDF.</span>`;
+    setStatus(`<span class="err">Popup blocked. Allow popups to download PDF.</span>`);
     return;
   }
   w.document.open();
@@ -497,40 +475,44 @@ function openPDF(){
 
 /* -------------------- Button handlers -------------------- */
 function onCalculate(){
-  const status = document.getElementById("statusText");
-  status.textContent = "";
+  setStatus("");
 
   const studentName = (document.getElementById("studentName").value || "").trim();
   if (!studentName){
-    status.innerHTML = `<span class="err">Student name is required.</span>`;
+    setStatus(`<span class="err">Student name is required.</span>`);
     return;
   }
 
   if (!isComplete()){
-    status.innerHTML = `<span class="err">Please answer all items (1–5).</span>`;
+    setStatus(`<span class="err">Please answer all items (1–5).</span>`);
     return;
   }
 
+  state.calculated = true;
   renderResults();
-  status.innerHTML = `<span class="ok">Thanks for completing!</span>`;
+  setStatus(`<span class="ok">Thanks for completing!</span>`);
 }
 
 function onDownloadPDF(){
-  const status = document.getElementById("statusText");
-  status.textContent = "";
+  setStatus("");
 
+  // Require results to be calculated first
+  if (!state.calculated){
+    setStatus(`<span class="err">Please click Calculate first.</span>`);
+    return;
+  }
   if (!isComplete()){
-    status.innerHTML = `<span class="err">Please answer all items (1–5).</span>`;
+    setStatus(`<span class="err">Please answer all items (1–5).</span>`);
     return;
   }
 
-  renderResults();
   openPDF();
 }
 
 function resetAll(){
   document.querySelectorAll("select[data-item]").forEach(s => s.value = "0");
-  document.getElementById("statusText").textContent = "";
+  state.calculated = false;
+  setStatus("");
   renderAnsweredCount();
   clearResults();
 }
@@ -538,7 +520,8 @@ function resetAll(){
 /* -------------------- Wiring -------------------- */
 document.getElementById("assessmentSelect").addEventListener("change", (e)=>{
   state.active = e.target.value;
-  document.getElementById("statusText").textContent = "";
+  state.calculated = false;
+  setStatus("");
   renderScale(state.active === "ibq" ? IBQ_SCALE : CONFLICT_SCALE);
   renderQuestions();
 });
@@ -553,4 +536,3 @@ renderQuestions();
 </script>
 </body>
 </html>
-
