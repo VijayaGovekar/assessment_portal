@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Assessment Portal</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --muted:#5b6475;
+      --text:#111827;
+      --line:rgba(17,24,39,.12);
+      --btn:#2563eb;
+      --ok:#059669;
+      --err:#b91c1c;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:22px 16px 56px;}
+    h1{font-size:22px;margin:0 0 12px;}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      box-shadow:0 6px 18px rgba(17,24,39,.06);
+    }
+    .grid{display:grid;gap:12px;}
+    @media (min-width:960px){ .grid{grid-template-columns: 1.25fr .75fr;} }
+    .topbar{display:grid;gap:10px;grid-template-columns:1fr;}
+    @media (min-width:820px){ .topbar{grid-template-columns: 1.2fr .8fr;} }
+    .label{font-size:12px;color:var(--muted);margin:0 0 6px}
+    select,input{
+      width:100%;
+      padding:9px 10px;
+      border-radius:10px;
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line)
+    }
+    select:focus,input:focus{outline:none;border-color:rgba(37,99,235,.55)}
+    .scaleBox{
+      margin-top:10px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+    }
+    .scaleTitle{font-size:12px;color:var(--muted);margin:0 0 6px;font-weight:700}
+    .scaleList{margin:0;padding-left:18px;font-size:13px;line-height:1.35}
+    .scaleList li{margin:2px 0}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+    button{cursor:pointer;border:0;border-radius:10px;padding:10px 12px;font-weight:650}
+    .primary{background:var(--btn);color:white}
+    .ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+    .ghost:hover{border-color:rgba(17,24,39,.22)}
+    .small{font-size:12px;color:var(--muted)}
+    .divider{height:1px;background:var(--line);margin:14px 0}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+    th{color:var(--muted);font-weight:600;font-size:12px;text-align:left}
+    td.n{width:56px;color:var(--muted);font-size:12px}
+    td.r{width:170px}
+    td.q{font-size:13px;line-height:1.3}
+    .sticky{position:sticky;top:14px}
+    .kv{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:10px 0}
+    .k{color:var(--muted);font-size:13px}
+    .v{font-weight:800;font-variant-numeric:tabular-nums}
+    .ok{color:var(--ok);font-weight:700}
+    .err{color:var(--err);font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Assessment Portal</h1>
+
+    <section class="card">
+      <div class="topbar">
+        <div>
+          <div class="label">Assessment</div>
+          <select id="assessmentSelect">
+            <option value="ibq">Influence Behavior Questionnaire (IBQ)</option>
+            <option value="conflict">Strategies for Handling Conflict Survey</option>
+          </select>
+        </div>
+        <div>
+          <div class="label">Student name</div>
+          <input type="text" id="studentName" placeholder="e.g., Jane Doe" />
+        </div>
+      </div>
+
+      <div class="scaleBox">
+        <div class="scaleTitle">Scale meaning</div>
+        <ul class="scaleList" id="scaleMeaning"></ul>
+      </div>
+    </section>
+
+    <div class="grid" style="margin-top:12px">
+      <section class="card">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:10px">
+          <h2 id="qTitle" style="margin:0;font-size:16px">Questions</h2>
+          <span class="small">All items are required.</span>
+        </div>
+
+        <div id="questionArea"></div>
+
+        <div class="controls">
+          <button class="primary" id="btnCalc" type="button">Calculate</button>
+          <button class="ghost" id="btnPDF" type="button">Download PDF</button>
+          <button class="ghost" id="btnReset" type="button">Reset</button>
+          <span class="small" id="statusText"></span>
+        </div>
+      </section>
+
+      <aside class="card sticky">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:10px">
+          <h2 style="margin:0;font-size:16px">Results</h2>
+          <span class="small" id="answeredCount">0/0 answered</span>
+        </div>
+
+        <div id="primaryBlock" style="display:none">
+          <div class="kv"><div class="k">Primary strategy</div><div class="v" id="primaryVal">—</div></div>
+          <div class="kv"><div class="k">Secondary strategy</div><div class="v" id="secondaryVal">—</div></div>
+          <div class="divider"></div>
+        </div>
+
+        <div class="kv" id="overallRow">
+          <div class="k">Overall average</div>
+          <div class="v" id="overallVal">—</div>
+        </div>
+
+        <div class="divider"></div>
+        <div id="dimensionResults"></div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+/* -------------------- Scales -------------------- */
+const IBQ_SCALE = [
+"1 — I can't remember ever using this tactic with others",
+  "2 — I very seldom uses this tactic with others",
+  "3 — I occasionally uses this tactic with others",
+  "4 — I uses this tactic moderately often with others",
+  "5 — I uses this tactic very often with others"
+];
+
+const CONFLICT_SCALE = [
+  "1 — rarely",
+  "2 — between rarely and somewhat",
+  "3 — somewhat",
+  "4 — between somewhat and always",
+  "5 — always"
+];
+
+/* -------------------- Questions -------------------- */
+const IBQ_QUESTIONS = {
+  1:"Uses facts and logic to make a persuasive case for a request or proposal.",
+  2:"Explains clearly why a request or proposed change is necessary to attain a task objective.",
+  3:"Explains why a proposed project or change would be practical and cost effective.",
+  4:"Provides information or evidence to show that a proposed activity or change is likely to be successful.",
+  5:"Offers something you want in return for your help on a task or project.",
+  6:"Offers to do something for you in exchange for carrying out a request.",
+  7:"Offers to do a specific task or favor for you in return for your help and support.",
+  8:"Offers to do something for you in the future in return for your help now.",
+  9:"Says a proposed activity or change is an opportunity to do something really exciting and worthwhile.",
+  10:"Describes a clear, inspiring vision of what a proposed project or change could accomplish.",
+  11:"Talks about ideals and values when proposing a new activity or change.",
+  12:"Makes an inspiring speech or presentation to arouse enthusiasm for a proposed activity or change.",
+  13:"Says that his/her request or proposal is consistent with official rules and policies.",
+  14:"Says that a request or proposal is consistent with a prior agreement or contract.",
+  15:"Verifies that a request is legitimate by referring to a document such as a work order, policy manual, charter, bylaws, or formal contract.",
+  16:"Says that a request or proposal is consistent with prior precedent and established practice.",
+  17:"Explains how the task he/she wants you to do could help your career.",
+  18:"Describes benefits you could gain from doing a task or activity (e.g., learn new skills, meet important people, enhance your reputation).",
+  19:"Explains how a proposed activity or change could help you attain a personal objective.",
+  20:"Explains why a proposed activity or change would be good for you.",
+  21:"Demands that you carry out a request.",
+  22:"Uses threats or warnings when trying to get you to do something.",
+  23:"Repeatedly checks to see if you have carried out a request.",
+  24:"Tries to pressure you to carry out a request.",
+  25:"Offers to help with a task that he/she wants you to carry out.",
+  26:"Offers to provide resources you would need to do a task for him/her.",
+  27:"Offers to show you how to do a task that he/she wants you to carry out.",
+  28:"Offers to provide any assistance you would need to carry out a request.",
+  29:"Says you have the special skills or knowledge needed to carry out a request.",
+  30:"Praises your past performance or achievements when asking you to do a task for him/her.",
+  31:"Praises your skill or knowledge when asking you to do something.",
+  32:"Says you are the most qualified person for a task that he/she wants you to do.",
+  33:"Asks you to suggest things you could do to help him/her achieve a task objective or resolve a problem.",
+  34:"Consults with you to get your ideas about a proposed activity or change that he/she wants you to support or implement.",
+  35:"Encourages you to express any concerns you may have about a proposed activity or change that he/she wants you to support or implement.",
+  36:"Invites you to suggest ways to improve a preliminary plan or proposal that he/she wants you to support or help implement.",
+  37:"Appeals to your friendship when asking you to do something.",
+  38:"Says he/she needs to ask for a favor before telling you what it is.",
+  39:"Asks you as a friend to do a favor for him/her.",
+  40:"Asks for your help as a personal favor.",
+  41:"Mentions the names of other people who endorse a proposal when asking you to support it.",
+  42:"Gets others to explain to you why they support a proposed activity or change that he/she wants you to support or help implement.",
+  43:"Brings someone along for support when meeting with you to make a request or proposal.",
+  44:"Asks someone you respect to help influence you to carry out a request or support a proposal."
+};
+
+const CONFLICT_QUESTIONS = {
+  1:"I argue my position tenaciously.",
+  2:"I put the needs of other parties to the conflict before my own.",
+  3:"I arrive at a compromise all parties can accept.",
+  4:"I try not to get involved in conflicts.",
+  5:"I investigate issues thoroughly and jointly.",
+  6:"During conflicts I try to find fault in others’ positions.",
+  7:"I foster harmony.",
+  8:"I negotiate to get a portion of what I propose.",
+  9:"I avoid discussing the most controversial aspects of a conflict openly.",
+  10:"I openly share information with others in resolving disagreements.",
+  11:"I enjoy winning an argument.",
+  12:"I am inclined to go along with the suggestions of other parties to a conflict.",
+  13:"I look for a middle ground to resolve disagreements.",
+  14:"To avoid hard feelings, I keep my true feelings to myself.",
+  15:"I encourage the open sharing of concerns and issues.",
+  16:"I am reluctant to admit I am wrong.",
+  17:"I try to help others avoid “losing face” in a conflict.",
+  18:"I stress the advantage of “give and take.”",
+  19:"I encourage others to take the lead in resolving controversy.",
+  20:"When stating my position I stress that it is only one point of view."
+};
+
+/* -------------------- Scoring groups -------------------- */
+const IBQ_TACTICS = [
+  { name: "Rational persuasion", items: [1,2,3,4] },
+  { name: "Exchange", items: [5,6,7,8] },
+  { name: "Inspirational appeal", items: [9,10,11,12] },
+  { name: "Legitimating", items: [13,14,15,16] },
+  { name: "Apprising", items: [17,18,19,20] },
+  { name: "Pressure", items: [21,22,23,24] },
+  { name: "Collaboration", items: [25,26,27,28] },
+  { name: "Ingratiation", items: [29,30,31,32] },
+  { name: "Consultation", items: [33,34,35,36] },
+  { name: "Personal Appeals", items: [37,38,39,40] },
+  { name: "Coalition", items: [41,42,43,44] },
+];
+
+const CONFLICT_STRATEGIES = [
+  { name: "Forcing", items: [1,6,11,16] },
+  { name: "Accommodating", items: [2,7,12,17] },
+  { name: "Compromising", items: [3,8,13,18] },
+  { name: "Avoiding", items: [4,9,14,19] },
+  { name: "Integrating", items: [5,10,15,20] },
+];
+
+/* -------------------- State -------------------- */
+let state = { active: "ibq" };
+
+/* -------------------- UI helpers -------------------- */
+function renderScale(list){
+  document.getElementById("scaleMeaning").innerHTML = list.map(x=>`<li>${x}</li>`).join("");
+}
+
+function selectHTML(itemId){
+  return `
+    <select data-item="${itemId}">
+      <option value="0" selected disabled>Select…</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>`;
+}
+
+function renderQuestions(){
+  const area = document.getElementById("questionArea");
+  const isIBQ = state.active === "ibq";
+  const questions = isIBQ ? IBQ_QUESTIONS : CONFLICT_QUESTIONS;
+  const total = isIBQ ? 44 : 20;
+
+  document.getElementById("qTitle").textContent = isIBQ
+    ? "Influence Behavior Questionnaire (IBQ)"
+    : "Strategies for Handling Conflict Survey";
+
+  const rows = Array.from({length: total}, (_,i)=>i+1).map(n => `
+    <tr>
+      <td class="n">${n}</td>
+      <td class="q">${questions[n]}</td>
+      <td class="r">${selectHTML(n)}</td>
+    </tr>
+  `).join("");
+
+  area.innerHTML = `
+    <table>
+      <thead>
+        <tr><th style="width:56px">#</th><th>Item</th><th style="width:170px">Response</th></tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  document.querySelectorAll("select[data-item]").forEach(s => {
+    s.value = "0";
+    s.addEventListener("change", () => {
+      renderAnsweredCount();
+      if (isComplete()) {
+        renderResults();
+        document.getElementById("statusText").textContent = "";
+      } else {
+        clearResults();
+      }
+    });
+  });
+
+  renderAnsweredCount();
+  clearResults();
+}
+
+/* -------------------- Data helpers -------------------- */
+function getResponses(){
+  const total = state.active === "ibq" ? 44 : 20;
+  const r = {};
+  let answered = 0;
+  for (let i=1;i<=total;i++){
+    const sel = document.querySelector(`select[data-item="${i}"]`);
+    const v = Number(sel.value);
+    r[i] = v;
+    if (v >= 1 && v <= 5) answered++;
+  }
+  return { responses: r, answered, total };
+}
+
+function isComplete(){
+  const { answered, total } = getResponses();
+  return answered === total;
+}
+
+function renderAnsweredCount(){
+  const { answered, total } = getResponses();
+  document.getElementById("answeredCount").textContent = `${answered}/${total} answered`;
+}
+
+function avg(nums){ return nums.reduce((a,b)=>a+b,0)/nums.length; }
+function sum(nums){ return nums.reduce((a,b)=>a+b,0); }
+
+function compute(){
+  const isIBQ = state.active === "ibq";
+  const { responses: r } = getResponses();
+
+  if (isIBQ){
+    const all = Array.from({length:44},(_,i)=>r[i+1]);
+    const overall = avg(all);
+    const dims = IBQ_TACTICS.map(t => ({ name: t.name, score: avg(t.items.map(i=>r[i])) }));
+    return { overall, dims, primary:null, secondary:null };
+  } else {
+    const totals = CONFLICT_STRATEGIES.map(s => ({ name: s.name, score: sum(s.items.map(i=>r[i])) }));
+    const sorted = [...totals].sort((a,b)=>b.score-a.score);
+    return {
+      overall:null,
+      dims: totals,
+      primary: `${sorted[0].name} (${sorted[0].score})`,
+      secondary: `${sorted[1].name} (${sorted[1].score})`,
+    };
+  }
+}
+
+/* -------------------- Results rendering -------------------- */
+function clearResults(){
+  const isIBQ = state.active === "ibq";
+  document.getElementById("primaryBlock").style.display = "none";
+  document.getElementById("overallRow").style.display = isIBQ ? "flex" : "none";
+  document.getElementById("overallVal").textContent = "—";
+  document.getElementById("dimensionResults").innerHTML = "";
+}
+
+function renderResults(){
+  const isIBQ = state.active === "ibq";
+  const res = compute();
+
+  document.getElementById("primaryBlock").style.display = isIBQ ? "none" : "block";
+  document.getElementById("overallRow").style.display = isIBQ ? "flex" : "none";
+
+  if (isIBQ){
+    document.getElementById("overallVal").textContent = res.overall.toFixed(2);
+  } else {
+    document.getElementById("primaryVal").textContent = res.primary;
+    document.getElementById("secondaryVal").textContent = res.secondary;
+  }
+
+  document.getElementById("dimensionResults").innerHTML = res.dims.map(d => `
+    <div class="kv">
+      <div class="k">${d.name}</div>
+      <div class="v">${isIBQ ? d.score.toFixed(2) : Math.round(d.score)}</div>
+    </div>
+  `).join("");
+
+  return res;
+}
+
+/* -------------------- PDF report -------------------- */
+function buildReportHTML(){
+  const isIBQ = state.active === "ibq";
+  const { responses } = getResponses();
+  const res = compute();
+
+  const name = (document.getElementById("studentName").value || "").trim();
+  const stamp = new Date().toLocaleString();
+  const total = isIBQ ? 44 : 20;
+
+  const scaleList = (isIBQ ? IBQ_SCALE : CONFLICT_SCALE).map(s=>`<li style="margin:2px 0">${s}</li>`).join("");
+
+  const dimsRows = res.dims.map(d => `
+    <tr>
+      <td style="padding:8px;border:1px solid #ddd;font-weight:600">${d.name}</td>
+      <td style="padding:8px;border:1px solid #ddd;text-align:right">${isIBQ ? d.score.toFixed(2) : Math.round(d.score)}</td>
+      <td style="padding:8px;border:1px solid #ddd;color:#555">${isIBQ ? "Average (1–5)" : "Total (4–20)"}</td>
+    </tr>
+  `).join("");
+
+  const questions = isIBQ ? IBQ_QUESTIONS : CONFLICT_QUESTIONS;
+
+  const answersRows = Array.from({length: total}, (_,i)=>i+1).map(n => `
+    <tr>
+      <td style="padding:7px;border:1px solid #ddd;width:52px">${n}</td>
+      <td style="padding:7px;border:1px solid #ddd">${questions[n]}</td>
+      <td style="padding:7px;border:1px solid #ddd;width:70px;text-align:center">${responses[n]}</td>
+    </tr>
+  `).join("");
+
+  const topBlock = isIBQ
+    ? `<p style="margin:8px 0 0"><b>Overall average:</b> ${res.overall.toFixed(2)}</p>`
+    : `<p style="margin:8px 0 0"><b>Primary strategy:</b> ${res.primary}</p>
+       <p style="margin:4px 0 0"><b>Secondary strategy:</b> ${res.secondary}</p>`;
+
+  return `<!doctype html>
+<html><head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Assessment Report</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:28px;color:#111}
+  .muted{color:#555}
+  h1{font-size:20px;margin:0}
+  h2{font-size:14px;margin:18px 0 8px}
+  table{border-collapse:collapse;width:100%}
+  .box{border:1px solid #ddd;border-radius:12px;padding:12px}
+  @media print{ body{margin:0} }
+</style>
+</head>
+<body onload="setTimeout(()=>window.print(), 150)">
+  <h1>${isIBQ ? "Influence Behavior Questionnaire (IBQ)" : "Strategies for Handling Conflict Survey"} — Report</h1>
+  <div class="muted" style="margin-top:4px">Student: ${name || "—"}<br/>Generated: ${stamp}</div>
+
+  <h2>Scale meaning</h2>
+  <div class="box"><ul style="margin:0;padding-left:18px">${scaleList}</ul></div>
+
+  <h2>Summary</h2>
+  <div class="box">
+    ${topBlock}
+    <table style="margin-top:10px">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px;border:1px solid #ddd;background:#fafafa">Dimension</th>
+          <th style="text-align:right;padding:8px;border:1px solid #ddd;background:#fafafa">Score</th>
+          <th style="text-align:left;padding:8px;border:1px solid #ddd;background:#fafafa">Type</th>
+        </tr>
+      </thead>
+      <tbody>${dimsRows}</tbody>
+    </table>
+  </div>
+
+  <h2>Responses</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:8px;border:1px solid #ddd;background:#fafafa;width:52px">#</th>
+        <th style="text-align:left;padding:8px;border:1px solid #ddd;background:#fafafa">Item</th>
+        <th style="text-align:center;padding:8px;border:1px solid #ddd;background:#fafafa;width:70px">Response</th>
+      </tr>
+    </thead>
+    <tbody>${answersRows}</tbody>
+  </table>
+</body></html>`;
+}
+
+function openPDF(){
+  const w = window.open("", "_blank");
+  if (!w){
+    document.getElementById("statusText").innerHTML =
+      `<span class="err">Popup blocked. Allow popups to download PDF.</span>`;
+    return;
+  }
+  w.document.open();
+  w.document.write(buildReportHTML());
+  w.document.close();
+}
+
+/* -------------------- Button handlers -------------------- */
+function onCalculate(){
+  const status = document.getElementById("statusText");
+  status.textContent = "";
+
+  const studentName = (document.getElementById("studentName").value || "").trim();
+  if (!studentName){
+    status.innerHTML = `<span class="err">Student name is required.</span>`;
+    return;
+  }
+
+  if (!isComplete()){
+    status.innerHTML = `<span class="err">Please answer all items (1–5).</span>`;
+    return;
+  }
+
+  renderResults();
+  status.innerHTML = `<span class="ok">Thanks for completing!</span>`;
+}
+
+function onDownloadPDF(){
+  const status = document.getElementById("statusText");
+  status.textContent = "";
+
+  if (!isComplete()){
+    status.innerHTML = `<span class="err">Please answer all items (1–5).</span>`;
+    return;
+  }
+
+  renderResults();
+  openPDF();
+}
+
+function resetAll(){
+  document.querySelectorAll("select[data-item]").forEach(s => s.value = "0");
+  document.getElementById("statusText").textContent = "";
+  renderAnsweredCount();
+  clearResults();
+}
+
+/* -------------------- Wiring -------------------- */
+document.getElementById("assessmentSelect").addEventListener("change", (e)=>{
+  state.active = e.target.value;
+  document.getElementById("statusText").textContent = "";
+  renderScale(state.active === "ibq" ? IBQ_SCALE : CONFLICT_SCALE);
+  renderQuestions();
+});
+
+document.getElementById("btnCalc").addEventListener("click", onCalculate);
+document.getElementById("btnPDF").addEventListener("click", onDownloadPDF);
+document.getElementById("btnReset").addEventListener("click", resetAll);
+
+/* -------------------- Initial render -------------------- */
+renderScale(IBQ_SCALE);
+renderQuestions();
+</script>
+</body>
+</html>
+
