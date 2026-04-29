@@ -6,25 +6,59 @@
   <title>Assessment Portal</title>
   <style>
     :root{
-      --bg:#f6f7fb; --card:#fff; --muted:#5b6475; --text:#111827; --line:rgba(17,24,39,.12);
-      --btn:#2563eb; --ok:#059669; --err:#b91c1c;
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --muted:#5b6475;
+      --text:#111827;
+      --line:rgba(17,24,39,.12);
+      --btn:#2563eb;
+      --ok:#059669;
+      --err:#b91c1c;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);}
-    .wrap{max-width:1100px;margin:0 auto;padding:22px 16px 56px;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:1180px;margin:0 auto;padding:22px 16px 56px;}
     h1{font-size:22px;margin:0 0 12px;}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(17,24,39,.06);}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      box-shadow:0 6px 18px rgba(17,24,39,.06);
+    }
     .grid{display:grid;gap:12px;}
-    @media (min-width:960px){ .grid{grid-template-columns: 1.25fr .75fr;} }
+    @media (min-width:980px){ .grid{grid-template-columns: 1.25fr .75fr;} }
+
     .topbar{display:grid;gap:10px;grid-template-columns:1fr;}
     @media (min-width:820px){ .topbar{grid-template-columns: 1.2fr .8fr;} }
+
     .label{font-size:12px;color:var(--muted);margin:0 0 6px}
-    select,input{width:100%;padding:9px 10px;border-radius:10px;background:#fff;color:var(--text);border:1px solid var(--line)}
+    select,input{
+      width:100%;
+      padding:9px 10px;
+      border-radius:10px;
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
     select:focus,input:focus{outline:none;border-color:rgba(37,99,235,.55)}
-    .scaleBox{margin-top:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;}
+
+    .scaleBox{
+      margin-top:10px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+    }
     .scaleTitle{font-size:12px;color:var(--muted);margin:0 0 6px;font-weight:700}
     .scaleList{margin:0;padding-left:18px;font-size:13px;line-height:1.35}
     .scaleList li{margin:2px 0}
+
     .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
     button{cursor:pointer;border:0;border-radius:10px;padding:10px 12px;font-weight:650}
     .primary{background:var(--btn);color:white}
@@ -32,18 +66,61 @@
     .ghost:hover{border-color:rgba(17,24,39,.22)}
     .small{font-size:12px;color:var(--muted)}
     .divider{height:1px;background:var(--line);margin:14px 0}
+
     table{width:100%;border-collapse:collapse}
     th,td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
-    th{color:var(--muted);font-weight:600;font-size:12px;text-align:left}
+    th{color:var(--muted);font-weight:700;font-size:12px;text-align:left}
     td.n{width:56px;color:var(--muted);font-size:12px}
     td.r{width:170px}
     td.q{font-size:13px;line-height:1.3}
+
     .sticky{position:sticky;top:14px}
     .kv{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:10px 0}
     .k{color:var(--muted);font-size:13px}
     .v{font-weight:800;font-variant-numeric:tabular-nums}
     .ok{color:var(--ok);font-weight:700}
     .err{color:var(--err);font-weight:700}
+
+    /* SAW UI */
+    .sawTools{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:10px}
+    .mini{max-width:240px}
+    .btnSm{padding:8px 10px;border-radius:10px}
+    .num{font-variant-numeric:tabular-nums}
+    .right{text-align:right}
+    .center{text-align:center}
+    .nowrap{white-space:nowrap}
+
+    /* SAW Want input - MORE VISIBLE */
+    .wantInput{
+      width:100%;
+      min-width:340px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(17,24,39,.22);
+      font-size:14px;
+      font-weight:650;
+      background:#ffffff;
+    }
+    .wantInput::placeholder{ color: rgba(91,100,117,.95); }
+
+    /* SAW table polish */
+    .sawWrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;margin-top:10px}
+    table.saw{width:100%;border-collapse:separate;border-spacing:0}
+    table.saw th, table.saw td{border-bottom:1px solid var(--line)}
+    table.saw thead th{
+      position:sticky; top:0; z-index:2;
+      background:#fafafa;
+    }
+    table.saw thead tr:nth-child(2) th{ top: 38px; z-index:3; }
+    table.saw tbody tr:nth-child(even){background:#fcfcfd}
+    table.saw td, table.saw th{padding:10px}
+    .sawScoreCell{
+      background:#f8fafc;
+      color:#111827;
+      font-weight:800;
+    }
+    .sawAltHeader{font-size:12px;color:var(--text);font-weight:800}
+    .sawSubHeader{font-size:11px;color:var(--muted);font-weight:700}
   </style>
 </head>
 <body>
@@ -57,6 +134,7 @@
           <select id="assessmentSelect">
             <option value="ibq">Influence Behavior Questionnaire (IBQ)</option>
             <option value="conflict">Strategies for Handling Conflict Survey</option>
+            <option value="saw">Simple Additive Weighting</option>
           </select>
         </div>
         <div>
@@ -66,7 +144,7 @@
       </div>
 
       <div class="scaleBox">
-        <div class="scaleTitle">Scale </div>
+        <div class="scaleTitle">Scale meaning</div>
         <ul class="scaleList" id="scaleMeaning"></ul>
       </div>
     </section>
@@ -75,7 +153,7 @@
       <section class="card">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:10px">
           <h2 id="qTitle" style="margin:0;font-size:16px">Questions</h2>
-          <span class="small">All items are required.</span>
+          <span class="small" id="reqText">All items are required.</span>
         </div>
 
         <div id="questionArea"></div>
@@ -101,7 +179,7 @@
         </div>
 
         <div class="kv" id="overallRow">
-          <div class="k">Overall average</div>
+          <div class="k" id="overallLabel">Overall average</div>
           <div class="v" id="overallVal">—</div>
         </div>
 
@@ -114,19 +192,24 @@
 <script>
 /* -------------------- Scales -------------------- */
 const IBQ_SCALE = [
-  "1 — I can't remember ever using this tactic with others",
-  "2 — I very seldom use this tactic with others",
-  "3 — I occasionally use this tactic with others",
-  "4 — I use this tactic moderately often with others",
-  "5 — I use this tactic very often with others"
+ "1 - I can't remember ever using this tactic with others",
+  "2 - I very seldom use this tactic with others",
+  "3 - I occasionally use this tactic with others",
+  "4 - I use this tactic moderately often with others",
+  "5 - I use this tactic very often with others"
 ];
 
 const CONFLICT_SCALE = [
-  "1 — rarely",
-  "2 — between rarely and somewhat",
-  "3 — somewhat",
-  "4 — between somewhat and always",
-  "5 — always"
+  "1 - rarely",
+  "2 - between rarely and somewhat",
+  "3 - somewhat",
+  "4 - between somewhat and always",
+  "5 - always"
+];
+
+const SAW_SCALE = [
+  "Weights: 0 - 10 (importance of each want)",
+  "Ratings: 0 - 10 (how well each alternative satisfies each want)"
 ];
 
 /* -------------------- Questions -------------------- */
@@ -177,6 +260,7 @@ const IBQ_QUESTIONS = {
   44:"Asks someone you respect to help influence you to carry out a request or support a proposal."
 };
 
+// EXACT sentences provided, in order 1–20:
 const CONFLICT_QUESTIONS = {
   1:"I argue my position tenaciously.",
   2:"I put the needs of other parties to the conflict before my own.",
@@ -226,33 +310,61 @@ const CONFLICT_STRATEGIES = [
 /* -------------------- State -------------------- */
 let state = {
   active: "ibq",
-  calculated: false
+  calculated: false,
+  saw: {
+    alternatives: ["Finance", "Leadership", "Design", "Advertising"],
+    wants: [] // { id, name, weight, ratings: {altName: number} }
+  }
 };
 
-/* -------------------- UI helpers -------------------- */
-function setStatus(html){
-  document.getElementById("statusText").innerHTML = html || "";
-}
+/* -------------------- Helpers -------------------- */
+function setStatus(html){ document.getElementById("statusText").innerHTML = html || ""; }
+function setAnsweredCount(a,b){ document.getElementById("answeredCount").textContent = `${a}/${b} answered`; }
 
 function renderScale(list){
-  document.getElementById("scaleMeaning").innerHTML = list.map(x=>`<li>${x}</li>`).join("");
+  document.getElementById("scaleMeaning").innerHTML = list.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
 }
 
-function selectHTML(itemId){
+function avg(nums){ return nums.reduce((a,b)=>a+b,0)/nums.length; }
+function sum(nums){ return nums.reduce((a,b)=>a+b,0); }
+
+function clearResultsPanel(){
+  document.getElementById("primaryBlock").style.display = "none";
+  document.getElementById("overallRow").style.display = "flex";
+  document.getElementById("overallLabel").textContent = "Overall average";
+  document.getElementById("overallVal").textContent = "—";
+  document.getElementById("primaryVal").textContent = "—";
+  document.getElementById("secondaryVal").textContent = "—";
+  document.getElementById("dimensionResults").innerHTML = "";
+}
+
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function escapeAttr(s){
+  return escapeHtml(s).replaceAll("`","&#096;");
+}
+function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+
+/* =========================================================
+   Likert Surveys (IBQ / Conflict)
+========================================================= */
+function select15(){
   return `
-    <select data-item="${itemId}">
+    <select class="respSelect">
       <option value="0" selected disabled>Select…</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
+      <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+      <option value="4">4</option><option value="5">5</option>
     </select>`;
 }
 
-function renderQuestions(){
-  const area = document.getElementById("questionArea");
-  const isIBQ = state.active === "ibq";
+function renderLikertSurvey(kind){
+  const isIBQ = kind === "ibq";
   const questions = isIBQ ? IBQ_QUESTIONS : CONFLICT_QUESTIONS;
   const total = isIBQ ? 44 : 20;
 
@@ -260,15 +372,21 @@ function renderQuestions(){
     ? "Influence Behavior Questionnaire (IBQ)"
     : "Strategies for Handling Conflict Survey";
 
+  document.getElementById("reqText").textContent = "All items are required.";
+  state.calculated = false;
+  setStatus("");
+  clearResultsPanel();
+  setAnsweredCount(0, total);
+
   const rows = Array.from({length: total}, (_,i)=>i+1).map(n => `
     <tr>
       <td class="n">${n}</td>
-      <td class="q">${questions[n]}</td>
-      <td class="r">${selectHTML(n)}</td>
+      <td class="q">${escapeHtml(questions[n])}</td>
+      <td class="r">${select15()}</td>
     </tr>
   `).join("");
 
-  area.innerHTML = `
+  document.getElementById("questionArea").innerHTML = `
     <table>
       <thead>
         <tr><th style="width:56px">#</th><th>Item</th><th style="width:170px">Response</th></tr>
@@ -277,92 +395,61 @@ function renderQuestions(){
     </table>
   `;
 
-  // reset state
-  state.calculated = false;
-  setStatus("");
-  renderAnsweredCount();
-  clearResults();
-
-  // only update count; DO NOT show results until Calculate
-  document.querySelectorAll("select[data-item]").forEach(s => {
-    s.value = "0";
-    s.addEventListener("change", () => {
-      // any change after calculating hides results again
+  document.querySelectorAll(".respSelect").forEach(sel=>{
+    sel.value = "0";
+    sel.addEventListener("change", ()=>{
       state.calculated = false;
       setStatus("");
-      renderAnsweredCount();
-      clearResults();
+      clearResultsPanel();
+      setAnsweredCount(countAnsweredLikert(total), total);
     });
   });
 }
 
-/* -------------------- Data helpers -------------------- */
-function getResponses(){
-  const total = state.active === "ibq" ? 44 : 20;
-  const r = {};
+function countAnsweredLikert(total){
   let answered = 0;
-  for (let i=1;i<=total;i++){
-    const sel = document.querySelector(`select[data-item="${i}"]`);
+  document.querySelectorAll(".respSelect").forEach(sel=>{
     const v = Number(sel.value);
-    r[i] = v;
     if (v >= 1 && v <= 5) answered++;
+  });
+  return answered;
+}
+
+function getLikertResponses(total){
+  const r = {};
+  const selects = document.querySelectorAll(".respSelect");
+  for(let i=0;i<total;i++){
+    r[i+1] = Number(selects[i].value);
   }
-  return { responses: r, answered, total };
+  return r;
 }
 
-function isComplete(){
-  const { answered, total } = getResponses();
-  return answered === total;
+function computeIBQ(r){
+  const all = Array.from({length:44},(_,i)=>r[i+1]);
+  const overall = avg(all);
+  const dims = IBQ_TACTICS.map(t => ({ name: t.name, score: avg(t.items.map(i=>r[i])) }));
+  return { overall, dims, primary:null, secondary:null };
 }
 
-function renderAnsweredCount(){
-  const { answered, total } = getResponses();
-  document.getElementById("answeredCount").textContent = `${answered}/${total} answered`;
+function computeConflict(r){
+  const totals = CONFLICT_STRATEGIES.map(s => ({ name: s.name, score: sum(s.items.map(i=>r[i])) }));
+  const sorted = [...totals].sort((a,b)=>b.score-a.score);
+  return {
+    overall:null,
+    dims: totals,
+    primary: `${sorted[0].name} (${sorted[0].score})`,
+    secondary: `${sorted[1].name} (${sorted[1].score})`
+  };
 }
 
-function avg(nums){ return nums.reduce((a,b)=>a+b,0)/nums.length; }
-function sum(nums){ return nums.reduce((a,b)=>a+b,0); }
-
-function compute(){
+function renderLikertResults(res){
   const isIBQ = state.active === "ibq";
-  const { responses: r } = getResponses();
-
-  if (isIBQ){
-    const all = Array.from({length:44},(_,i)=>r[i+1]);
-    const overall = avg(all);
-    const dims = IBQ_TACTICS.map(t => ({ name: t.name, score: avg(t.items.map(i=>r[i])) }));
-    return { overall, dims, primary:null, secondary:null };
-  } else {
-    const totals = CONFLICT_STRATEGIES.map(s => ({ name: s.name, score: sum(s.items.map(i=>r[i])) }));
-    const sorted = [...totals].sort((a,b)=>b.score-a.score);
-    return {
-      overall:null,
-      dims: totals,
-      primary: `${sorted[0].name} (${sorted[0].score})`,
-      secondary: `${sorted[1].name} (${sorted[1].score})`,
-    };
-  }
-}
-
-/* -------------------- Results rendering -------------------- */
-function clearResults(){
-  const isIBQ = state.active === "ibq";
-  document.getElementById("primaryBlock").style.display = "none";
-  document.getElementById("overallRow").style.display = isIBQ ? "flex" : "none";
-  document.getElementById("overallVal").textContent = "—";
-  document.getElementById("dimensionResults").innerHTML = "";
-  document.getElementById("primaryVal").textContent = "—";
-  document.getElementById("secondaryVal").textContent = "—";
-}
-
-function renderResults(){
-  const isIBQ = state.active === "ibq";
-  const res = compute();
 
   document.getElementById("primaryBlock").style.display = isIBQ ? "none" : "block";
   document.getElementById("overallRow").style.display = isIBQ ? "flex" : "none";
 
   if (isIBQ){
+    document.getElementById("overallLabel").textContent = "Overall average";
     document.getElementById("overallVal").textContent = res.overall.toFixed(2);
   } else {
     document.getElementById("primaryVal").textContent = res.primary;
@@ -371,50 +458,379 @@ function renderResults(){
 
   document.getElementById("dimensionResults").innerHTML = res.dims.map(d => `
     <div class="kv">
-      <div class="k">${d.name}</div>
+      <div class="k">${escapeHtml(d.name)}</div>
       <div class="v">${isIBQ ? d.score.toFixed(2) : Math.round(d.score)}</div>
     </div>
   `).join("");
 }
 
-/* -------------------- PDF report -------------------- */
+/* =========================================================
+   SAW: Simple Additive Weighting
+========================================================= */
+function renderSAW(){
+  document.getElementById("qTitle").textContent = "Simple Additive Weighting";
+  document.getElementById("reqText").textContent = "Add wants, then assign weights and ratings.";
+
+  state.calculated = false;
+  setStatus("");
+  clearResultsPanel();
+
+  document.getElementById("primaryBlock").style.display = "none";
+  document.getElementById("overallRow").style.display = "flex";
+  document.getElementById("overallLabel").textContent = "Top alternative";
+  document.getElementById("overallVal").textContent = "—";
+  document.getElementById("dimensionResults").innerHTML = "";
+  setAnsweredCount(0, 0);
+
+  document.getElementById("questionArea").innerHTML = `
+    <div class="sawTools">
+      <div class="mini">
+        <div class="label">Add alternative</div>
+        <input id="altInput" type="text" placeholder="e.g., Option A" />
+      </div>
+      <button class="ghost btnSm" id="btnAddAlt" type="button">Add Alternative</button>
+      <button class="ghost btnSm" id="btnResetAlt" type="button">Reset Alternatives</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sawTools">
+      <button class="ghost btnSm" id="btnAddWant" type="button">Add Want</button>
+      <span class="small">Weights and ratings are 0–10.</span>
+    </div>
+
+    <div class="sawWrap">
+      <table id="sawTable" class="saw"></table>
+    </div>
+  `;
+
+  document.getElementById("btnAddAlt").onclick = () => {
+    const v = (document.getElementById("altInput").value || "").trim();
+    if (!v) return;
+    if (state.saw.alternatives.includes(v)) return;
+
+    state.saw.alternatives.push(v);
+    state.saw.wants.forEach(w => { w.ratings[v] = 0; });
+
+    state.calculated = false;
+    setStatus("");
+    document.getElementById("overallVal").textContent = "—";
+    document.getElementById("dimensionResults").innerHTML = "";
+
+    renderSAWTable();
+    renderSAWAnsweredCount();
+  };
+
+  document.getElementById("btnResetAlt").onclick = () => {
+    state.saw.alternatives = ["Finance", "Leadership", "Design", "Advertising"];
+    state.saw.wants.forEach(w => {
+      const newRatings = {};
+      state.saw.alternatives.forEach(a => newRatings[a] = 0);
+      w.ratings = newRatings;
+    });
+
+    state.calculated = false;
+    setStatus("");
+    document.getElementById("overallVal").textContent = "—";
+    document.getElementById("dimensionResults").innerHTML = "";
+
+    renderSAW();
+  };
+
+  document.getElementById("btnAddWant").onclick = () => {
+    const id = uid();
+    const ratings = {};
+    state.saw.alternatives.forEach(a => ratings[a] = 0);
+    state.saw.wants.push({ id, name:"", weight:0, ratings });
+
+    state.calculated = false;
+    setStatus("");
+    document.getElementById("overallVal").textContent = "—";
+    document.getElementById("dimensionResults").innerHTML = "";
+
+    renderSAWTable();
+    renderSAWAnsweredCount();
+  };
+
+  renderSAWTable();
+  renderSAWAnsweredCount();
+}
+
+function renderSAWTable(){
+  const table = document.getElementById("sawTable");
+  if(!table) return;
+
+  const alts = state.saw.alternatives;
+
+  const headerAltRow1 = alts.map(a => `
+    <th class="center sawAltHeader" colspan="2">${escapeHtml(a)}</th>
+  `).join("");
+
+  const headerAltRow2 = alts.map(() => `
+    <th class="center sawSubHeader nowrap">Rating (0–10)</th>
+    <th class="center sawSubHeader nowrap">Score</th>
+  `).join("");
+
+  const rows = state.saw.wants.map((w, idx) => {
+    const altCells = alts.map(a => {
+      const ratingSel = `
+        <select class="sawRating" data-want="${w.id}" data-alt="${escapeAttr(a)}">
+          <option value="0" ${w.ratings[a]===0 ? "selected" : ""} disabled>Select…</option>
+          ${Array.from({length:11},(_,i)=>`<option value="${i}" ${w.ratings[a]===i ? "selected":""}>${i}</option>`).join("")}
+        </select>
+      `;
+
+      const scoreVal = (state.calculated && isSAWComplete())
+        ? (Number(w.weight) * Number(w.ratings[a]))
+        : "—";
+
+      return `
+        <td class="center">${ratingSel}</td>
+        <td class="center sawScoreCell num">${scoreVal}</td>
+      `;
+    }).join("");
+
+    const weightSel = `
+      <select class="sawWeight" data-want="${w.id}">
+        <option value="0" ${w.weight===0 ? "selected":""} disabled>Select…</option>
+        ${Array.from({length:11},(_,i)=>`<option value="${i}" ${w.weight===i ? "selected":""}>${i}</option>`).join("")}
+      </select>
+    `;
+
+    return `
+      <tr>
+        <td class="n">${idx+1}</td>
+        <td>
+          <input class="sawWantName wantInput" data-want="${w.id}" type="text"
+                 placeholder="Enter want..." value="${escapeAttr(w.name)}" />
+        </td>
+        <td class="center">${weightSel}</td>
+        ${altCells}
+        <td class="center">
+          <button class="ghost btnSm" type="button" data-delwant="${w.id}">Remove</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  const totals = computeSAWTotals();
+  const totalCells = alts.map(a => {
+    const t = (state.calculated && isSAWComplete()) ? totals[a] : "—";
+    return `
+      <td class="center"></td>
+      <td class="center sawScoreCell num"><b>${t}</b></td>
+    `;
+  }).join("");
+
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th style="width:56px" rowspan="2">#</th>
+        <th rowspan="2" style="min-width:360px">Want</th>
+        <th class="center nowrap" style="width:140px" rowspan="2">Weight (0–10)</th>
+        ${headerAltRow1}
+        <th style="width:110px" rowspan="2"></th>
+      </tr>
+      <tr>
+        ${headerAltRow2}
+      </tr>
+    </thead>
+
+    <tbody>
+      ${rows || `<tr><td colspan="${4 + alts.length*2}"><span class="small">Click “Add Want” to start.</span></td></tr>`}
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <th colspan="3" class="right">Total score</th>
+        ${totalCells}
+        <th></th>
+      </tr>
+    </tfoot>
+  `;
+
+  document.querySelectorAll(".sawWantName").forEach(inp=>{
+    inp.oninput = () => {
+      const id = inp.dataset.want;
+      const w = state.saw.wants.find(x=>x.id===id);
+      if(w){ w.name = inp.value; }
+      state.calculated = false;
+      setStatus("");
+      document.getElementById("overallVal").textContent = "—";
+      document.getElementById("dimensionResults").innerHTML = "";
+      renderSAWAnsweredCount();
+    };
+  });
+
+  document.querySelectorAll(".sawWeight").forEach(sel=>{
+    sel.onchange = () => {
+      const id = sel.dataset.want;
+      const w = state.saw.wants.find(x=>x.id===id);
+      if(w){ w.weight = Number(sel.value); }
+      state.calculated = false;
+      setStatus("");
+      document.getElementById("overallVal").textContent = "—";
+      document.getElementById("dimensionResults").innerHTML = "";
+      renderSAWAnsweredCount();
+    };
+  });
+
+  document.querySelectorAll(".sawRating").forEach(sel=>{
+    sel.onchange = () => {
+      const id = sel.dataset.want;
+      const alt = sel.dataset.alt;
+      const w = state.saw.wants.find(x=>x.id===id);
+      if(w){ w.ratings[alt] = Number(sel.value); }
+      state.calculated = false;
+      setStatus("");
+      document.getElementById("overallVal").textContent = "—";
+      document.getElementById("dimensionResults").innerHTML = "";
+      renderSAWAnsweredCount();
+    };
+  });
+
+  document.querySelectorAll("button[data-delwant]").forEach(btn=>{
+    btn.onclick = () => {
+      const id = btn.dataset.delwant;
+      state.saw.wants = state.saw.wants.filter(w=>w.id!==id);
+      state.calculated = false;
+      setStatus("");
+      document.getElementById("overallVal").textContent = "—";
+      document.getElementById("dimensionResults").innerHTML = "";
+      renderSAWTable();
+      renderSAWAnsweredCount();
+    };
+  });
+}
+
+function isSAWComplete(){
+  const alts = state.saw.alternatives;
+  if(state.saw.wants.length === 0) return false;
+
+  for(const w of state.saw.wants){
+    if(!w.name || !w.name.trim()) return false;
+    if(!Number.isInteger(w.weight) || w.weight < 1 || w.weight > 10) return false;
+    for(const a of alts){
+      const v = w.ratings[a];
+      if(!Number.isInteger(v) || v < 1 || v > 10) return false;
+    }
+  }
+  return true;
+}
+
+function computeSAWTotals(){
+  const totals = {};
+  state.saw.alternatives.forEach(a=>totals[a]=0);
+  state.saw.wants.forEach(w=>{
+    state.saw.alternatives.forEach(a=>{
+      totals[a] += Number(w.weight) * Number(w.ratings[a]);
+    });
+  });
+  return totals;
+}
+
+function renderSAWAnsweredCount(){
+  if(state.saw.wants.length === 0){
+    setAnsweredCount(0, 1);
+    return;
+  }
+  setAnsweredCount(isSAWComplete() ? 1 : 0, 1);
+}
+
+function renderSAWResults(){
+  const totals = computeSAWTotals();
+  const entries = Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+  if(entries.length === 0) return;
+
+  document.getElementById("overallLabel").textContent = "Top alternative";
+  document.getElementById("overallVal").textContent = `${entries[0][0]} (${entries[0][1]})`;
+
+  document.getElementById("dimensionResults").innerHTML = entries.map(([name,val])=>`
+    <div class="kv">
+      <div class="k">${escapeHtml(name)}</div>
+      <div class="v">${val}</div>
+    </div>
+  `).join("");
+
+  renderSAWTable();
+}
+
+/* =========================================================
+   PDF Report + Calculate / PDF / Reset
+   (unchanged from your file)
+========================================================= */
+
 function buildReportHTML(){
-  const isIBQ = state.active === "ibq";
-  const { responses } = getResponses();
-  const res = compute();
-
-  const name = (document.getElementById("studentName").value || "").trim();
+  const studentName = (document.getElementById("studentName").value || "").trim();
   const stamp = new Date().toLocaleString();
-  const total = isIBQ ? 44 : 20;
 
-  const scaleList = (isIBQ ? IBQ_SCALE : CONFLICT_SCALE).map(s=>`<li style="margin:2px 0">${s}</li>`).join("");
+  if(state.active === "saw"){
+    const alts = state.saw.alternatives;
+    const wants = state.saw.wants;
+    const totals = computeSAWTotals();
+    const entries = Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+    const top = entries[0] ? `${entries[0][0]} (${entries[0][1]})` : "—";
 
-  const dimsRows = res.dims.map(d => `
-    <tr>
-      <td style="padding:8px;border:1px solid #ddd;font-weight:600">${d.name}</td>
-      <td style="padding:8px;border:1px solid #ddd;text-align:right">${isIBQ ? d.score.toFixed(2) : Math.round(d.score)}</td>
-      <td style="padding:8px;border:1px solid #ddd;color:#555">${isIBQ ? "Average (1–5)" : "Total (4–20)"}</td>
-    </tr>
-  `).join("");
+    const scaleList = SAW_SCALE.map(s=>`<li style="margin:2px 0">${escapeHtml(s)}</li>`).join("");
 
-  const questions = isIBQ ? IBQ_QUESTIONS : CONFLICT_QUESTIONS;
+    const header1 = `
+      <tr>
+        <th style="text-align:left;padding:8px;border:1px solid #ddd;background:#fafafa;width:40px" rowspan="2">#</th>
+        <th style="text-align:left;padding:8px;border:1px solid #ddd;background:#fafafa" rowspan="2">Want</th>
+        <th style="text-align:center;padding:8px;border:1px solid #ddd;background:#fafafa;width:90px" rowspan="2">Weight</th>
+        ${alts.map(a=>`
+          <th style="text-align:center;padding:8px;border:1px solid #ddd;background:#fafafa" colspan="2">
+            ${escapeHtml(a)}
+          </th>
+        `).join("")}
+      </tr>
+    `;
+    const header2 = `
+      <tr>
+        ${alts.map(()=>`
+          <th style="text-align:center;padding:8px;border:1px solid #ddd;background:#fafafa;width:70px">Rating</th>
+          <th style="text-align:center;padding:8px;border:1px solid #ddd;background:#fafafa;width:70px">Score</th>
+        `).join("")}
+      </tr>
+    `;
 
-  const answersRows = Array.from({length: total}, (_,i)=>i+1).map(n => `
-    <tr>
-      <td style="padding:7px;border:1px solid #ddd;width:52px">${n}</td>
-      <td style="padding:7px;border:1px solid #ddd">${questions[n]}</td>
-      <td style="padding:7px;border:1px solid #ddd;width:70px;text-align:center">${responses[n]}</td>
-    </tr>
-  `).join("");
+    const body = wants.map((w,i)=>{
+      const cells = alts.map(a=>{
+        const r = w.ratings[a];
+        const sc = Number(w.weight) * Number(r);
+        return `
+          <td style="padding:7px;border:1px solid #ddd;text-align:center">${r}</td>
+          <td style="padding:7px;border:1px solid #ddd;text-align:center">${sc}</td>
+        `;
+      }).join("");
+      return `
+        <tr>
+          <td style="padding:7px;border:1px solid #ddd">${i+1}</td>
+          <td style="padding:7px;border:1px solid #ddd">${escapeHtml(w.name)}</td>
+          <td style="padding:7px;border:1px solid #ddd;text-align:center">${w.weight}</td>
+          ${cells}
+        </tr>
+      `;
+    }).join("");
 
-  const topBlock = isIBQ
-    ? `<p style="margin:8px 0 0"><b>Overall average:</b> ${res.overall.toFixed(2)}</p>`
-    : `<p style="margin:8px 0 0"><b>Primary strategy:</b> ${res.primary}</p>
-       <p style="margin:4px 0 0"><b>Secondary strategy:</b> ${res.secondary}</p>`;
+    const totalRow = `
+      <tr>
+        <td colspan="3" style="padding:7px;border:1px solid #ddd;text-align:right"><b>Total</b></td>
+        ${alts.map(a=>`
+          <td style="padding:7px;border:1px solid #ddd"></td>
+          <td style="padding:7px;border:1px solid #ddd;text-align:center"><b>${totals[a]}</b></td>
+        `).join("")}
+      </tr>
+    `;
 
-  return `<!doctype html>
-<html><head><meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+    const totalsBox = entries.map(([n,v])=>`
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:6px 0">
+        <span>${escapeHtml(n)}</span><b>${v}</b>
+      </div>
+    `).join("");
+
+    return `<!doctype html>
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Assessment Report</title>
 <style>
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:28px;color:#111}
@@ -424,11 +840,74 @@ function buildReportHTML(){
   table{border-collapse:collapse;width:100%}
   .box{border:1px solid #ddd;border-radius:12px;padding:12px}
   @media print{ body{margin:0} }
-</style>
-</head>
+</style></head>
+<body onload="setTimeout(()=>window.print(), 150)">
+  <h1>Simple Additive Weighting — Report</h1>
+  <div class="muted" style="margin-top:4px">Student: ${escapeHtml(studentName || "—")}<br/>Generated: ${stamp}</div>
+
+  <h2>Scale meaning</h2>
+  <div class="box"><ul style="margin:0;padding-left:18px">${scaleList}</ul></div>
+
+  <h2>Summary</h2>
+  <div class="box">
+    <p style="margin:8px 0 0"><b>Top alternative:</b> ${escapeHtml(top)}</p>
+    <div style="margin-top:10px">${totalsBox}</div>
+  </div>
+
+  <h2>Weights, ratings, and scores</h2>
+  <table>
+    <thead>${header1}${header2}</thead>
+    <tbody>${body}${totalRow}</tbody>
+  </table>
+</body></html>`;
+  }
+
+  // IBQ / Conflict PDF
+  const isIBQ = state.active === "ibq";
+  const total = isIBQ ? 44 : 20;
+  const questions = isIBQ ? IBQ_QUESTIONS : CONFLICT_QUESTIONS;
+  const scale = isIBQ ? IBQ_SCALE : CONFLICT_SCALE;
+
+  const r = getLikertResponses(total);
+  const res = isIBQ ? computeIBQ(r) : computeConflict(r);
+
+  const scaleList = scale.map(s=>`<li style="margin:2px 0">${escapeHtml(s)}</li>`).join("");
+  const dimsRows = res.dims.map(d => `
+    <tr>
+      <td style="padding:8px;border:1px solid #ddd;font-weight:600">${escapeHtml(d.name)}</td>
+      <td style="padding:8px;border:1px solid #ddd;text-align:right">${isIBQ ? d.score.toFixed(2) : Math.round(d.score)}</td>
+      <td style="padding:8px;border:1px solid #ddd;color:#555">${isIBQ ? "Average (1–5)" : "Total"}</td>
+    </tr>
+  `).join("");
+
+  const answersRows = Array.from({length: total}, (_,i)=>i+1).map(n => `
+    <tr>
+      <td style="padding:7px;border:1px solid #ddd;width:52px">${n}</td>
+      <td style="padding:7px;border:1px solid #ddd">${escapeHtml(questions[n])}</td>
+      <td style="padding:7px;border:1px solid #ddd;width:70px;text-align:center">${r[n]}</td>
+    </tr>
+  `).join("");
+
+  const topBlock = isIBQ
+    ? `<p style="margin:8px 0 0"><b>Overall average:</b> ${res.overall.toFixed(2)}</p>`
+    : `<p style="margin:8px 0 0"><b>Primary strategy:</b> ${escapeHtml(res.primary)}</p>
+       <p style="margin:4px 0 0"><b>Secondary strategy:</b> ${escapeHtml(res.secondary)}</p>`;
+
+  return `<!doctype html>
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Assessment Report</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:28px;color:#111}
+  .muted{color:#555}
+  h1{font-size:20px;margin:0}
+  h2{font-size:14px;margin:18px 0 8px}
+  table{border-collapse:collapse;width:100%}
+  .box{border:1px solid #ddd;border-radius:12px;padding:12px}
+  @media print{ body{margin:0} }
+</style></head>
 <body onload="setTimeout(()=>window.print(), 150)">
   <h1>${isIBQ ? "Influence Behavior Questionnaire (IBQ)" : "Strategies for Handling Conflict Survey"} — Report</h1>
-  <div class="muted" style="margin-top:4px">Student: ${name || "—"}<br/>Generated: ${stamp}</div>
+  <div class="muted" style="margin-top:4px">Student: ${escapeHtml(studentName || "—")}<br/>Generated: ${stamp}</div>
 
   <h2>Scale meaning</h2>
   <div class="box"><ul style="margin:0;padding-left:18px">${scaleList}</ul></div>
@@ -473,9 +952,12 @@ function openPDF(){
   w.document.close();
 }
 
-/* -------------------- Button handlers -------------------- */
-function onCalculate(){
+/* =========================================================
+   Calculate / PDF / Reset behavior
+========================================================= */
+function handleCalculate(){
   setStatus("");
+  clearResultsPanel();
 
   const studentName = (document.getElementById("studentName").value || "").trim();
   if (!studentName){
@@ -483,56 +965,109 @@ function onCalculate(){
     return;
   }
 
-  if (!isComplete()){
+  if (state.active === "saw"){
+    if (!isSAWComplete()){
+      setStatus(`<span class="err">Please add at least one want and select all weights/ratings (1–10) for every cell.</span>`);
+      return;
+    }
+    state.calculated = true;
+    setStatus(`<span class="ok">Thanks for completing!</span>`);
+    renderSAWResults();
+    return;
+  }
+
+  const total = (state.active === "ibq") ? 44 : 20;
+  const answered = countAnsweredLikert(total);
+  setAnsweredCount(answered, total);
+
+  if (answered !== total){
     setStatus(`<span class="err">Please answer all items (1–5).</span>`);
     return;
   }
 
+  const r = getLikertResponses(total);
+  const res = (state.active === "ibq") ? computeIBQ(r) : computeConflict(r);
+
   state.calculated = true;
-  renderResults();
+  renderLikertResults(res);
   setStatus(`<span class="ok">Thanks for completing!</span>`);
 }
 
-function onDownloadPDF(){
+function handleDownloadPDF(){
   setStatus("");
 
-  // Require results to be calculated first
   if (!state.calculated){
     setStatus(`<span class="err">Please click Calculate first.</span>`);
     return;
   }
-  if (!isComplete()){
-    setStatus(`<span class="err">Please answer all items (1–5).</span>`);
-    return;
+
+  if (state.active === "saw"){
+    if (!isSAWComplete()){
+      setStatus(`<span class="err">Please complete all wants/weights/ratings and click Calculate again.</span>`);
+      return;
+    }
+  } else {
+    const total = (state.active === "ibq") ? 44 : 20;
+    if (countAnsweredLikert(total) !== total){
+      setStatus(`<span class="err">Please complete all items and click Calculate again.</span>`);
+      return;
+    }
   }
 
   openPDF();
 }
 
-function resetAll(){
-  document.querySelectorAll("select[data-item]").forEach(s => s.value = "0");
+function handleReset(){
   state.calculated = false;
   setStatus("");
-  renderAnsweredCount();
-  clearResults();
+  clearResultsPanel();
+
+  if (state.active === "saw"){
+    state.saw = { alternatives: ["Finance","Leadership","Design","Advertising"], wants: [] };
+    renderScale(SAW_SCALE);
+    renderSAW();
+    return;
+  }
+
+  renderActive();
+}
+
+/* =========================================================
+   Main render switch
+========================================================= */
+function renderActive(){
+  state.calculated = false;
+  setStatus("");
+  clearResultsPanel();
+
+  if (state.active === "ibq"){
+    renderScale(IBQ_SCALE);
+    renderLikertSurvey("ibq");
+    setAnsweredCount(0, 44);
+  } else if (state.active === "conflict"){
+    renderScale(CONFLICT_SCALE);
+    renderLikertSurvey("conflict");
+    setAnsweredCount(0, 20);
+  } else {
+    renderScale(SAW_SCALE);
+    renderSAW();
+  }
 }
 
 /* -------------------- Wiring -------------------- */
 document.getElementById("assessmentSelect").addEventListener("change", (e)=>{
   state.active = e.target.value;
-  state.calculated = false;
-  setStatus("");
-  renderScale(state.active === "ibq" ? IBQ_SCALE : CONFLICT_SCALE);
-  renderQuestions();
+  renderActive();
 });
 
-document.getElementById("btnCalc").addEventListener("click", onCalculate);
-document.getElementById("btnPDF").addEventListener("click", onDownloadPDF);
-document.getElementById("btnReset").addEventListener("click", resetAll);
+document.getElementById("btnCalc").addEventListener("click", handleCalculate);
+document.getElementById("btnPDF").addEventListener("click", handleDownloadPDF);
+document.getElementById("btnReset").addEventListener("click", handleReset);
 
-/* -------------------- Initial render -------------------- */
+/* -------------------- Initial -------------------- */
 renderScale(IBQ_SCALE);
-renderQuestions();
+renderLikertSurvey("ibq");
+setAnsweredCount(0, 44);
 </script>
 </body>
 </html>
