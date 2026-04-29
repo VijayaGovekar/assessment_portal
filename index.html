@@ -567,8 +567,8 @@ function renderSAWTable(){
   `).join("");
 
   const headerAltRow2 = alts.map(() => `
-    <th class="center sawSubHeader nowrap">Rating</th>
-    <th class="center sawSubHeader nowrap">Score</th>
+    <th class="center sawSubHeader nowrap" style="min-width:110px">Rating</th>
+    <th class="center sawSubHeader nowrap" style="min-width:110px">Score</th>
   `).join("");
 
   const rows = state.saw.wants.map((w, idx) => {
@@ -585,7 +585,7 @@ function renderSAWTable(){
         : "—";
 
       return `
-        <td class="center">${ratingSel}</td>
+        <td class="center" style="min-width:110px">${ratingSel}</td>
         <td class="center sawScoreCell num">${scoreVal}</td>
       `;
     }).join("");
