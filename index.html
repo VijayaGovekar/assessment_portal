@@ -149,7 +149,8 @@
       </div>
     </section>
 
-    <div class="grid" style="margin-top:12px">
+    <!-- CHANGED: Results card moved below and shown only after Calculate -->
+    <div style="margin-top:12px">
       <section class="card">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:10px">
           <h2 id="qTitle" style="margin:0;font-size:16px">Questions</h2>
@@ -166,7 +167,7 @@
         </div>
       </section>
 
-      <aside class="card sticky">
+      <aside class="card" id="resultsCard" style="display:none; margin-top:12px;">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:10px">
           <h2 style="margin:0;font-size:16px">Results</h2>
           <span class="small" id="answeredCount">0/0 answered</span>
@@ -321,6 +322,18 @@ let state = {
 function setStatus(html){ document.getElementById("statusText").innerHTML = html || ""; }
 function setAnsweredCount(a,b){ document.getElementById("answeredCount").textContent = `${a}/${b} answered`; }
 
+function hideResultsCard(){
+  const rc = document.getElementById("resultsCard");
+  if (rc) rc.style.display = "none";
+}
+function showResultsCard(){
+  const rc = document.getElementById("resultsCard");
+  if (rc){
+    rc.style.display = "block";
+    rc.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
 function renderScale(list){
   document.getElementById("scaleMeaning").innerHTML = list.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
 }
@@ -376,6 +389,7 @@ function renderLikertSurvey(kind){
   state.calculated = false;
   setStatus("");
   clearResultsPanel();
+  hideResultsCard();
   setAnsweredCount(0, total);
 
   const rows = Array.from({length: total}, (_,i)=>i+1).map(n => `
@@ -401,6 +415,7 @@ function renderLikertSurvey(kind){
       state.calculated = false;
       setStatus("");
       clearResultsPanel();
+      hideResultsCard();
       setAnsweredCount(countAnsweredLikert(total), total);
     });
   });
@@ -474,6 +489,7 @@ function renderSAW(){
   state.calculated = false;
   setStatus("");
   clearResultsPanel();
+  hideResultsCard();
 
   document.getElementById("primaryBlock").style.display = "none";
   document.getElementById("overallRow").style.display = "flex";
@@ -514,6 +530,7 @@ function renderSAW(){
 
     state.calculated = false;
     setStatus("");
+    hideResultsCard();
     document.getElementById("overallVal").textContent = "—";
     document.getElementById("dimensionResults").innerHTML = "";
 
@@ -531,6 +548,7 @@ function renderSAW(){
 
     state.calculated = false;
     setStatus("");
+    hideResultsCard();
     document.getElementById("overallVal").textContent = "—";
     document.getElementById("dimensionResults").innerHTML = "";
 
@@ -545,6 +563,7 @@ function renderSAW(){
 
     state.calculated = false;
     setStatus("");
+    hideResultsCard();
     document.getElementById("overallVal").textContent = "—";
     document.getElementById("dimensionResults").innerHTML = "";
 
@@ -656,6 +675,7 @@ function renderSAWTable(){
       if(w){ w.name = inp.value; }
       state.calculated = false;
       setStatus("");
+      hideResultsCard();
       document.getElementById("overallVal").textContent = "—";
       document.getElementById("dimensionResults").innerHTML = "";
       renderSAWAnsweredCount();
@@ -669,6 +689,7 @@ function renderSAWTable(){
       if(w){ w.weight = Number(sel.value); }
       state.calculated = false;
       setStatus("");
+      hideResultsCard();
       document.getElementById("overallVal").textContent = "—";
       document.getElementById("dimensionResults").innerHTML = "";
       renderSAWAnsweredCount();
@@ -683,6 +704,7 @@ function renderSAWTable(){
       if(w){ w.ratings[alt] = Number(sel.value); }
       state.calculated = false;
       setStatus("");
+      hideResultsCard();
       document.getElementById("overallVal").textContent = "—";
       document.getElementById("dimensionResults").innerHTML = "";
       renderSAWAnsweredCount();
@@ -695,6 +717,7 @@ function renderSAWTable(){
       state.saw.wants = state.saw.wants.filter(w=>w.id!==id);
       state.calculated = false;
       setStatus("");
+      hideResultsCard();
       document.getElementById("overallVal").textContent = "—";
       document.getElementById("dimensionResults").innerHTML = "";
       renderSAWTable();
@@ -757,7 +780,6 @@ function renderSAWResults(){
 
 /* =========================================================
    PDF Report + Calculate / PDF / Reset
-   (unchanged from your file)
 ========================================================= */
 
 function buildReportHTML(){
@@ -958,6 +980,7 @@ function openPDF(){
 function handleCalculate(){
   setStatus("");
   clearResultsPanel();
+  hideResultsCard();
 
   const studentName = (document.getElementById("studentName").value || "").trim();
   if (!studentName){
@@ -973,6 +996,7 @@ function handleCalculate(){
     state.calculated = true;
     setStatus(`<span class="ok">Thanks for completing!</span>`);
     renderSAWResults();
+    showResultsCard();
     return;
   }
 
@@ -991,6 +1015,7 @@ function handleCalculate(){
   state.calculated = true;
   renderLikertResults(res);
   setStatus(`<span class="ok">Thanks for completing!</span>`);
+  showResultsCard();
 }
 
 function handleDownloadPDF(){
@@ -1021,6 +1046,7 @@ function handleReset(){
   state.calculated = false;
   setStatus("");
   clearResultsPanel();
+  hideResultsCard();
 
   if (state.active === "saw"){
     state.saw = { alternatives: ["Finance","Leadership","Design","Advertising"], wants: [] };
@@ -1039,6 +1065,7 @@ function renderActive(){
   state.calculated = false;
   setStatus("");
   clearResultsPanel();
+  hideResultsCard();
 
   if (state.active === "ibq"){
     renderScale(IBQ_SCALE);
@@ -1068,6 +1095,7 @@ document.getElementById("btnReset").addEventListener("click", handleReset);
 renderScale(IBQ_SCALE);
 renderLikertSurvey("ibq");
 setAnsweredCount(0, 44);
+hideResultsCard();
 </script>
 </body>
 </html>
